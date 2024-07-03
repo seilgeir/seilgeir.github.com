@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Comma-Separated List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Karla&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Karla', sans-serif;
+            font-size: 14px;
+        }
+        h1, h3 {
+            font-weight: normal;
+        }
+        h3 {
+            color: steelblue;
+            margin-bottom: 0;
+        }
+        textarea {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 10.9px;
+            width: 100%;
+            height: 200px;
+            overflow-y: scroll;
+            resize: none;
+            border-color: lightblue;
+        }
+        #output {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Make Comma-Separated List of Strings</h1>
+    <label for="input"><h3>Input</h3></label>
+    <textarea type="text" id="input" name="input"></textarea><br><br>
+    <input type="checkbox" id="quote" checked="checked"> Quotation marks<br><br>
+    <label for="output"><h3>Output</h3></label>
+    <textarea type="text" id="output" name="output"></textarea>
+    <script>
+        function u() {
+            const text = document.getElementById('input').value;
+            const quote = document.getElementById('quote').checked;
+            var parts = text.replace(/\xa0/g, ' ').split('\n').map((part) => part.trim()).filter((part) => part !== '');
+            if (parts.length <= 1) {
+                var parts = text.split(/\s+/).filter((part) => part !== '');
+            }
+            var merged = parts.map(function(part) {
+                return quote ? ("'" + part + "'") : part;
+            }).join(',');
+            document.getElementById('output').value = merged;
+        }
+        document.getElementById('input').addEventListener('input', u);
+        document.getElementById('quote').addEventListener('change', u);
+        ['input', 'output'].forEach(function(id) {
+            document.getElementById(id).addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'a') {
+                    e.preventDefault();
+                    this.select();
+                }
+            });
+        document.getElementById(id).addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                navigator.clipboard.writeText(this.value);
+            }});
+        });
+    </script>
+</body>
+</html>
